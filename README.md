@@ -1,3 +1,7 @@
+# GOAL : Recreate the TI-108 Calculator
+
+![TI-108 screenshot](./ti-108.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
