@@ -1,11 +1,13 @@
 import React from "react";
 import "./App.scss";
 import { Calculator } from "./components/calculator";
-
+import { CalculatorContextProvider } from "./components/calculator/calculator.context";
 function App() {
   return (
     <div className="wrapper">
-      <Calculator />
+      <CalculatorContextProvider>
+        <Calculator />
+      </CalculatorContextProvider>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext } from "react";
+import React, { useState, createContext } from "react";
 
 interface CalcContext {
   //TODO Type Later
@@ -28,12 +28,12 @@ export const CalculatorContextProvider = ({
 }: {
   children: JSX.Element;
 }) => {
-  const [equation, setEquation] = useState<string>("");
-  const [memory, setMemory] = useState<string>("");
-  const [answer, setAnswer] = useState<string>("");
-  const [display, setDisplay] = useState<string>("");
+  const [equation, setEquation] = useState<string>();
+  const [memory, setMemory] = useState<string>();
+  const [answer, setAnswer] = useState<string>();
+  const [display, setDisplay] = useState<string>("display");
 
-  const initialContextValue: CalcContext = {
+  const initialContextValue = {
     equation,
     setEquation,
     memory,
@@ -43,7 +43,6 @@ export const CalculatorContextProvider = ({
     display,
     setDisplay
   };
-
   return (
     <CalculatorContext.Provider value={initialContextValue}>
       {children}

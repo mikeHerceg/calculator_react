@@ -1,0 +1,15 @@
+.button {
+  height: 50px;
+  width: 40px;
+  border-radius: 5px;
+  &:hover {
+  }
+  &:focus {
+  }
+}
+.red-button {
+  background: var(--red);
+}
+.white-button {
+  background: var(--white);
+}

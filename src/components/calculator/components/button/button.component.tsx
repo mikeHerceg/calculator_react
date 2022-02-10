@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./button.modules.scss";
+import styles from "./button.module.scss";
 interface ButtonProps {
   onClick: Function;
   text: String;
