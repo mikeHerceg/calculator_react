@@ -1,0 +1,20 @@
+.screen {
+  margin-top: calc(4 * var(--spacer));
+  display: flex;
+  width: 100%;
+  .display {
+    padding: var(--spacer);
+    min-height: 40px;
+    flex-grow: 1;
+    background: var(--screen);
+    border: 5px solid var(--gray);
+    color: var(--black);
+    font-size: 2rem;
+    text-align: right;
+  }
+  .block {
+    border: 1px solid var(--dark-blue);
+    width: 30px;
+    display: block;
+  }
+}
