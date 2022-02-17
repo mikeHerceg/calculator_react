@@ -5,7 +5,9 @@
   .display {
     padding: var(--spacer);
     min-height: 40px;
-    flex-grow: 1;
+    width: 275px;
+    overflow: hidden;
+
     background: var(--screen);
     border: 5px solid var(--gray);
     color: var(--black);
@@ -14,7 +16,7 @@
   }
   .block {
     border: 1px solid var(--dark-blue);
-    width: 30px;
+    flex-grow: 1;
     display: block;
   }
 }

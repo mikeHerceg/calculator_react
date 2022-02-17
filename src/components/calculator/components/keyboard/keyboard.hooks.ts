@@ -1,11 +1,39 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { CalculatorContext } from "../../calculator.context";
 import { KeyboardButton } from "./keyboardButton.type";
 
 export const useKeyboardButtons = () => {
-  const { display, setDisplay, setMemory, memory } = useContext(
-    CalculatorContext
-  );
+  const {
+    display,
+    setDisplay,
+    setMemory,
+    memory,
+    setEquation,
+    equation
+  } = useContext(CalculatorContext);
+
+  const handleClear = () => {
+    setDisplay("");
+    //only clear equation if display is empty, clicked twice
+    if (display !== "") return;
+    setEquation("");
+  };
+
+  const buildEquation = (symbol: string) => {
+    //dont add if there isn't a display value to equate
+    if (display === "") return;
+    const newE = equation ? equation + display + symbol : display + symbol;
+    setEquation(newE);
+    setDisplay("");
+  };
+
+  const executeEquation = () => {
+    //todo
+    const currentE = equation + display;
+    const answer = "this is your answer";
+    setDisplay(answer);
+    setEquation("");
+  };
 
   const calculatorButtons: KeyboardButton[] = [
     {
@@ -26,7 +54,7 @@ export const useKeyboardButtons = () => {
     {
       text: "÷",
       color: "red",
-      function: () => setDisplay("/")
+      function: () => buildEquation("/")
     },
     {
       text: "MRC",
@@ -46,7 +74,7 @@ export const useKeyboardButtons = () => {
     {
       text: "x",
       color: "red",
-      function: () => setDisplay("*")
+      function: () => buildEquation("*")
     },
     {
       text: "7",
@@ -66,7 +94,7 @@ export const useKeyboardButtons = () => {
     {
       text: "-",
       color: "red",
-      function: () => setDisplay("-")
+      function: () => buildEquation("-")
     },
     {
       text: "4",
@@ -86,7 +114,7 @@ export const useKeyboardButtons = () => {
     {
       text: "+",
       color: "red",
-      function: () => setDisplay("+")
+      function: () => buildEquation("+")
     },
     {
       text: "1",
@@ -106,12 +134,12 @@ export const useKeyboardButtons = () => {
     {
       text: "=",
       color: "red",
-      function: () => setDisplay("=")
+      function: () => executeEquation()
     },
     {
       text: "on/c",
       color: "red",
-      function: () => setDisplay("")
+      function: () => handleClear()
     },
     {
       text: "0",

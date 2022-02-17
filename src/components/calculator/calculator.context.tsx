@@ -28,10 +28,10 @@ export const CalculatorContextProvider = ({
 }: {
   children: JSX.Element;
 }) => {
-  const [equation, setEquation] = useState<string>();
-  const [memory, setMemory] = useState<string>();
-  const [answer, setAnswer] = useState<string>();
-  const [display, setDisplay] = useState<string>("display");
+  const [equation, setEquation] = useState<string>("");
+  const [memory, setMemory] = useState<string>("");
+  const [answer, setAnswer] = useState<string>("");
+  const [display, setDisplay] = useState<string>("");
 
   const initialContextValue = {
     equation,
