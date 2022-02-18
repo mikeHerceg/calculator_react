@@ -2,6 +2,34 @@ import React, { useContext, useState } from "react";
 import { CalculatorContext } from "../../calculator.context";
 import { KeyboardButton } from "./keyboardButton.type";
 
+type Keys =
+  | "+/-"
+  | "√"
+  | "%"
+  | "÷"
+  | "MRC"
+  | "M-"
+  | "M+"
+  | "x"
+  | "7"
+  | "8"
+  | "9"
+  | "-"
+  | "4"
+  | "5"
+  | "6"
+  | "+"
+  | "1"
+  | "2"
+  | "3"
+  | "="
+  | "on/c"
+  | "0"
+  | "."
+  //remove or move
+  | "/"
+  | "*";
+
 export const useKeyboardButtons = () => {
   const {
     display,
@@ -12,6 +40,8 @@ export const useKeyboardButtons = () => {
     equation
   } = useContext(CalculatorContext);
 
+  const [lastKey, setLastKey] = useState<Keys>();
+
   const handleClear = () => {
     setDisplay("");
     //only clear equation if display is empty, clicked twice
@@ -19,12 +49,11 @@ export const useKeyboardButtons = () => {
     setEquation("");
   };
 
-  const buildEquation = (symbol: string) => {
+  const buildEquation = (symbol: Keys) => {
     //dont add if there isn't a display value to equate
     if (display === "") return;
     const newE = equation ? equation + display + symbol : display + symbol;
     setEquation(newE);
-    setDisplay("");
   };
 
   const executeEquation = () => {
@@ -35,106 +64,148 @@ export const useKeyboardButtons = () => {
     setEquation("");
   };
 
+  const handleSymbol = (symbol: Keys) => {
+    setLastKey(symbol);
+    switch (symbol) {
+      case "+/-":
+        setDisplay(display * -1);
+        break;
+      case "√":
+        Math.sqrt(display);
+        break;
+      case "%":
+        setDisplay(Number(display * 0.01).toFixed(2));
+        break;
+      case "MRC": //set memory as display and clear memory will need to build out this function
+        setDisplay(memory);
+        break;
+      case "M-":
+        setMemory(null);
+        break;
+      case "M+":
+        setMemory(display);
+        break;
+      case "+":
+        buildEquation("+");
+        break;
+      case "*":
+        buildEquation("*");
+        break;
+      case "/":
+        buildEquation("/");
+        break;
+      case "=":
+        executeEquation();
+        break;
+      default:
+        if (display !== "") {
+          setDisplay(display + symbol);
+        } else {
+          setDisplay(symbol);
+        }
+    }
+  };
+
   const calculatorButtons: KeyboardButton[] = [
     {
       text: "+/-",
       color: "red",
-      function: () => setDisplay(display * -1)
+      function: () => handleSymbol("+/-")
     },
     {
       text: "√",
       color: "red",
-      function: () => setDisplay(Math.sqrt(display))
+      function: () => handleSymbol("√")
     },
     {
       text: "%",
       color: "red",
-      function: () => setDisplay(Number(display * 0.01).toFixed(2))
+      function: () => handleSymbol("%")
     },
     {
       text: "÷",
       color: "red",
-      function: () => buildEquation("/")
+      function: () => handleSymbol("/")
     },
     {
       text: "MRC",
       color: "red",
-      function: () => setDisplay(memory) //set memory as display and clear memory will need to build out this function
+      function: () => handleSymbol("MRC")
     },
     {
       text: "M-",
       color: "red",
-      function: () => setMemory(null)
+      function: () => handleSymbol("M-")
     },
     {
       text: "M+",
       color: "red",
-      function: () => setMemory(display)
+      function: () => handleSymbol("M+")
     },
     {
       text: "x",
       color: "red",
-      function: () => buildEquation("*")
+      function: () => handleSymbol("*")
     },
     {
       text: "7",
       color: "white",
-      function: () => setDisplay(display + "7")
+      function: () => handleSymbol("7")
     },
     {
       text: "8",
       color: "white",
-      function: () => setDisplay(display + "8")
+      function: () => handleSymbol("8")
     },
     {
       text: "9",
       color: "white",
-      function: () => setDisplay(display + "9")
+      function: () => handleSymbol("9")
     },
     {
       text: "-",
       color: "red",
-      function: () => buildEquation("-")
+      function: () => handleSymbol("-")
     },
     {
       text: "4",
       color: "white",
-      function: () => setDisplay(display + "4")
+      function: () => handleSymbol("4")
     },
     {
       text: "5",
       color: "white",
-      function: () => setDisplay(display + "5")
+      function: () => handleSymbol("5")
     },
     {
       text: "6",
       color: "white",
-      function: () => setDisplay(display + "6")
+      function: () => handleSymbol("6")
     },
     {
       text: "+",
       color: "red",
-      function: () => buildEquation("+")
+      function: () => handleSymbol("+")
     },
     {
       text: "1",
       color: "white",
-      function: () => setDisplay(display + "1")
+      function: () => handleSymbol("1")
     },
     {
       text: "2",
       color: "white",
-      function: () => setDisplay(display + "2")
+      function: () => handleSymbol("2")
     },
     {
       text: "3",
       color: "white",
-      function: () => setDisplay(display + "3")
+      function: () => handleSymbol("3")
     },
     {
       text: "=",
       color: "red",
-      function: () => executeEquation()
+      function: () => handleSymbol("=")
     },
     {
       text: "on/c",
@@ -144,12 +215,12 @@ export const useKeyboardButtons = () => {
     {
       text: "0",
       color: "white",
-      function: () => setDisplay(display + "0")
+      function: () => handleSymbol("0")
     },
     {
       text: ".",
       color: "white",
-      function: () => setDisplay(display + ".")
+      function: () => handleSymbol(".")
     }
   ];
   return calculatorButtons;

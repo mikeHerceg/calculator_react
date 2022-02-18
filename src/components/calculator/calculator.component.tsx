@@ -8,9 +8,9 @@ export const Calculator = () => {
   const { equation } = useContext(CalculatorContext);
   return (
     <div className={styles.calculator}>
-      {equation}
       <Screen />
       <Keyboard />
+      {equation}
     </div>
   );
 };

@@ -10,6 +10,7 @@ export const Keyboard = () => {
       {calculatorButtons.map((button: KeyboardButton) => {
         return (
           <Button
+            key={button.text}
             text={button.text}
             color={button.color}
             onClick={button.function}
