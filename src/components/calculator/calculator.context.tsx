@@ -8,8 +8,8 @@ interface CalcContext {
   setMemory: any;
   answer: any;
   setAnswer: any;
-  display: any;
-  setDisplay: any;
+  display: number;
+  setDisplay: (number: number) => void;
 }
 
 export const CalculatorContext = createContext<CalcContext>({
@@ -19,7 +19,7 @@ export const CalculatorContext = createContext<CalcContext>({
   setMemory: () => {},
   answer: "",
   setAnswer: () => {},
-  display: "",
+  display: 0,
   setDisplay: () => {}
 });
 
@@ -31,7 +31,7 @@ export const CalculatorContextProvider = ({
   const [equation, setEquation] = useState<string>("");
   const [memory, setMemory] = useState<string>("");
   const [answer, setAnswer] = useState<string>("");
-  const [display, setDisplay] = useState<string>("");
+  const [display, setDisplay] = useState<number>(0);
 
   const initialContextValue = {
     equation,

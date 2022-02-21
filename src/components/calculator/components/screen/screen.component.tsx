@@ -6,7 +6,7 @@ export const Screen = () => {
   return (
     <div className={styles.screen}>
       <span className={styles.block}></span>
-      <span className={styles.display}>{display}</span>
+      <span className={styles.display}>{display || ""}</span>
       <span className={styles.block}></span>
     </div>
   );

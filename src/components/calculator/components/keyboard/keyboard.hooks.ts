@@ -11,25 +11,14 @@ type Keys =
   | "M-"
   | "M+"
   | "x"
-  | "7"
-  | "8"
-  | "9"
   | "-"
-  | "4"
-  | "5"
-  | "6"
   | "+"
-  | "1"
-  | "2"
-  | "3"
   | "="
   | "on/c"
-  | "0"
   | "."
   //remove or move
   | "/"
   | "*";
-
 export const useKeyboardButtons = () => {
   const {
     display,
@@ -40,28 +29,58 @@ export const useKeyboardButtons = () => {
     equation
   } = useContext(CalculatorContext);
 
-  const [lastKey, setLastKey] = useState<Keys>();
+  const isNumber = (value: any) => Boolean(typeof value === "number");
+
+  const [lastKey, setLastKey] = useState<Keys | number>();
 
   const handleClear = () => {
-    setDisplay("");
+    setDisplay(0);
     //only clear equation if display is empty, clicked twice
-    if (display !== "") return;
-    setEquation("");
+    if (display !== 0) return;
+    setEquation();
   };
 
   const buildEquation = (symbol: Keys) => {
     //dont add if there isn't a display value to equate
-    if (display === "") return;
-    const newE = equation ? equation + display + symbol : display + symbol;
-    setEquation(newE);
+    if (display === 0) return;
+    if (!equation) {
+      setEquation([display, symbol]);
+      return;
+    }
+    const tempEquation = [...equation, display];
+    if (tempEquation.length >= 3) {
+      setEquation([evalEquation(tempEquation, tempEquation[1]), symbol]);
+      return;
+    }
+    setEquation([...equation, display, symbol]);
+  };
+
+  const evalEquation = (
+    equation: Array<any>,
+    operator: "+" | "-" | "/" | "*"
+  ) => {
+    return equation
+      .filter((item: any) => item !== operator)
+      .reduce((a: number, b: number) => {
+        switch (operator) {
+          case "+":
+            return a + b;
+          case "-":
+            return a - b;
+          case "*":
+            return a * b;
+          case "/":
+            return a / b;
+        }
+      });
   };
 
   const executeEquation = () => {
     //todo
-    const currentE = equation + display;
-    const answer = "this is your answer";
+    const currentEquation = [...equation, display];
+    const answer = evalEquation(currentEquation, currentEquation[1]);
     setDisplay(answer);
-    setEquation("");
+    setEquation([]);
   };
 
   const handleSymbol = (symbol: Keys) => {
@@ -74,7 +93,7 @@ export const useKeyboardButtons = () => {
         Math.sqrt(display);
         break;
       case "%":
-        setDisplay(Number(display * 0.01).toFixed(2));
+        setDisplay(display * 0.01);
         break;
       case "MRC": //set memory as display and clear memory will need to build out this function
         setDisplay(memory);
@@ -88,6 +107,9 @@ export const useKeyboardButtons = () => {
       case "+":
         buildEquation("+");
         break;
+      case "-":
+        buildEquation("-");
+        break;
       case "*":
         buildEquation("*");
         break;
@@ -97,13 +119,17 @@ export const useKeyboardButtons = () => {
       case "=":
         executeEquation();
         break;
-      default:
-        if (display !== "") {
-          setDisplay(display + symbol);
-        } else {
-          setDisplay(symbol);
-        }
     }
+  };
+
+  const handleNumber = (number: number) => {
+    setLastKey(number);
+    if (!isNumber(lastKey)) {
+      setDisplay(number);
+      return;
+    }
+    const newDisplay = display.toString() + number.toString();
+    setDisplay(parseInt(newDisplay));
   };
 
   const calculatorButtons: KeyboardButton[] = [
@@ -150,17 +176,17 @@ export const useKeyboardButtons = () => {
     {
       text: "7",
       color: "white",
-      function: () => handleSymbol("7")
+      function: () => handleNumber(7)
     },
     {
       text: "8",
       color: "white",
-      function: () => handleSymbol("8")
+      function: () => handleNumber(8)
     },
     {
       text: "9",
       color: "white",
-      function: () => handleSymbol("9")
+      function: () => handleNumber(9)
     },
     {
       text: "-",
@@ -170,17 +196,17 @@ export const useKeyboardButtons = () => {
     {
       text: "4",
       color: "white",
-      function: () => handleSymbol("4")
+      function: () => handleNumber(4)
     },
     {
       text: "5",
       color: "white",
-      function: () => handleSymbol("5")
+      function: () => handleNumber(5)
     },
     {
       text: "6",
       color: "white",
-      function: () => handleSymbol("6")
+      function: () => handleNumber(6)
     },
     {
       text: "+",
@@ -190,17 +216,17 @@ export const useKeyboardButtons = () => {
     {
       text: "1",
       color: "white",
-      function: () => handleSymbol("1")
+      function: () => handleNumber(1)
     },
     {
       text: "2",
       color: "white",
-      function: () => handleSymbol("2")
+      function: () => handleNumber(2)
     },
     {
       text: "3",
       color: "white",
-      function: () => handleSymbol("3")
+      function: () => handleNumber(3)
     },
     {
       text: "=",
@@ -215,7 +241,7 @@ export const useKeyboardButtons = () => {
     {
       text: "0",
       color: "white",
-      function: () => handleSymbol("0")
+      function: () => handleNumber(0)
     },
     {
       text: ".",
