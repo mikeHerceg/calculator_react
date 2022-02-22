@@ -19,6 +19,14 @@ type Keys =
   //remove or move
   | "/"
   | "*";
+
+enum Operators {
+  addition = "+",
+  subtraction = "-",
+  multiplication = "*",
+  division = "/"
+}
+
 export const useKeyboardButtons = () => {
   const {
     display,
@@ -29,15 +37,33 @@ export const useKeyboardButtons = () => {
     equation
   } = useContext(CalculatorContext);
 
+  const [lastKey, setLastKey] = useState<Keys | number>();
+
+  // utils
   const isNumber = (value: any) => Boolean(typeof value === "number");
 
-  const [lastKey, setLastKey] = useState<Keys | number>();
+  const evalEquation = (equation: Array<number>, operator: Operators) => {
+    return equation
+      .filter((item: any) => item !== operator)
+      .reduce((a: number, b: number) => {
+        switch (operator) {
+          case Operators.addition:
+            return a + b;
+          case Operators.subtraction:
+            return a - b;
+          case Operators.multiplication:
+            return a * b;
+          case Operators.division:
+            return a / b;
+        }
+      });
+  };
 
   const handleClear = () => {
     setDisplay(0);
     //only clear equation if display is empty, clicked twice
     if (display !== 0) return;
-    setEquation();
+    setEquation([]);
   };
 
   const buildEquation = (symbol: Keys) => {
@@ -55,32 +81,19 @@ export const useKeyboardButtons = () => {
     setEquation([...equation, display, symbol]);
   };
 
-  const evalEquation = (
-    equation: Array<any>,
-    operator: "+" | "-" | "/" | "*"
-  ) => {
-    return equation
-      .filter((item: any) => item !== operator)
-      .reduce((a: number, b: number) => {
-        switch (operator) {
-          case "+":
-            return a + b;
-          case "-":
-            return a - b;
-          case "*":
-            return a * b;
-          case "/":
-            return a / b;
-        }
-      });
-  };
-
   const executeEquation = () => {
-    //todo
     const currentEquation = [...equation, display];
     const answer = evalEquation(currentEquation, currentEquation[1]);
     setDisplay(answer);
     setEquation([]);
+  };
+
+  const handleMemory = () => {
+    if (display !== memory && memory) {
+      setDisplay(memory);
+      return;
+    }
+    setMemory(null);
   };
 
   const handleSymbol = (symbol: Keys) => {
@@ -90,13 +103,13 @@ export const useKeyboardButtons = () => {
         setDisplay(display * -1);
         break;
       case "√":
-        Math.sqrt(display);
+        setDisplay(Math.sqrt(display));
         break;
       case "%":
         setDisplay(display * 0.01);
         break;
-      case "MRC": //set memory as display and clear memory will need to build out this function
-        setDisplay(memory);
+      case "MRC":
+        handleMemory();
         break;
       case "M-":
         setMemory(null);
@@ -105,16 +118,16 @@ export const useKeyboardButtons = () => {
         setMemory(display);
         break;
       case "+":
-        buildEquation("+");
+        buildEquation(Operators.addition);
         break;
       case "-":
-        buildEquation("-");
+        buildEquation(Operators.subtraction);
         break;
       case "*":
-        buildEquation("*");
+        buildEquation(Operators.multiplication);
         break;
       case "/":
-        buildEquation("/");
+        buildEquation(Operators.division);
         break;
       case "=":
         executeEquation();
