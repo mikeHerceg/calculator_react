@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Button } from "../button";
-import { KeyboardButton } from "./keyboardButton.type";
+import { KeyboardButton } from "./keyboard.types";
 import { useKeyboardButtons } from "./keyboard.hooks";
 import styles from "./keyboard.module.scss";
 export const Keyboard = () => {

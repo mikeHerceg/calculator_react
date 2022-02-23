@@ -1,31 +1,6 @@
 import React, { useContext, useState } from "react";
 import { CalculatorContext } from "../../calculator.context";
-import { KeyboardButton } from "./keyboardButton.type";
-
-type Keys =
-  | "+/-"
-  | "√"
-  | "%"
-  | "÷"
-  | "MRC"
-  | "M-"
-  | "M+"
-  | "x"
-  | "-"
-  | "+"
-  | "="
-  | "on/c"
-  | "."
-  //remove or move
-  | "/"
-  | "*";
-
-enum Operators {
-  addition = "+",
-  subtraction = "-",
-  multiplication = "*",
-  division = "/"
-}
+import { KeyboardButton, Keys, Operators } from "./keyboard.types";
 
 export const useKeyboardButtons = () => {
   const {
@@ -39,7 +14,6 @@ export const useKeyboardButtons = () => {
 
   const [lastKey, setLastKey] = useState<Keys | number>();
 
-  // utils
   const isNumber = (value: any) => Boolean(typeof value === "number");
 
   const evalEquation = (equation: Array<number>, operator: Operators) => {
