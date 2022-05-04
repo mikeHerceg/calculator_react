@@ -2,6 +2,10 @@
 
 ![TI-108 screenshot](./ti-108.png)
 
+### Demo
+
+[Demo Link](https://mikeherceg.github.io/calculator_react/)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
